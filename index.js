@@ -85,18 +85,26 @@ app.post("/submit", async (req, res) => {
   let answer = req.body.answer.trim();
   let isCorrect = false;
   
+  console.log("Before answer check:", currentQuestion); // Debugging line
+  
   if (currentQuestion.capital.toLowerCase() === answer.toLowerCase()) {
     totalCorrect++;
     isCorrect = true;
   }
   
+  console.log("After answer check:", currentQuestion); // Debugging line
+  
   await nextQuestion(); // Get the next question
+  
+  console.log("After nextQuestion:", currentQuestion); // Debugging line
+  
   res.render("index.ejs", {
     question: currentQuestion,
     wasCorrect: isCorrect,
     totalScore: totalCorrect,
   });
 });
+
 
 
 app.listen(port, () => {
