@@ -57,17 +57,22 @@ let currentQuestion = {};
 //   console.log(currentQuestion);
 //   res.render("index.ejs", { question: currentQuestion });
 // });
+// GET home page
 app.get("/", async (req, res) => {
   try {
     totalCorrect = 0;
     await nextQuestion();
+    if (!currentQuestion) {
+      throw new Error("Failed to fetch next question");
+    }
     console.log(currentQuestion);
     res.render("index.ejs", { question: currentQuestion });
   } catch (err) {
     console.error("Error getting next question:", err);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send(`Internal Server Error: ${err.message}`);
   }
 });
+
 
 
 // POST a new post
