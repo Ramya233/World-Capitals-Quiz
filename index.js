@@ -52,30 +52,20 @@ let currentQuestion = {};
 app.get("/", async (req, res) => {
   totalCorrect = 0;
   await nextQuestion();
-  console.log(currentQuestion);
-  res.render("index.ejs", { question: currentQuestion });
+  const currentUser = await getCurrentUser();
+  const countries = await checkVisisted();
+  res.render("index.ejs", {
+    question: currentQuestion,
+    countries: countries,
+    total: countries.length,
+    users: users,
+    color: currentUser.color,
+  });
 });
 
 
+
 // POST a new post
-// app.post("/submit", (req, res) => {
-//   let answer = req.body.answer.trim();
-//   let isCorrect = false;
-//   if (currentQuestion.capital.toLowerCase() === answer.toLowerCase()) {
-//     totalCorrect++;
-//     console.log(totalCorrect);
-//     isCorrect = true;
-//   }
-
-//   nextQuestion();
-//   res.render("index.ejs", {
-//     question: currentQuestion,
-//     wasCorrect: isCorrect,
-//     totalScore: totalCorrect,
-//   });
-// });
-
-
 app.post("/submit", (req, res) => {
   let answer = req.body.answer.trim();
   let isCorrect = false;
@@ -98,12 +88,6 @@ async function nextQuestion() {
   const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
   currentQuestion = randomCountry;
 }
-
-// async function nextQuestion() {
-//   const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
-//   currentQuestion = randomCountry;
-//   return currentQuestion;
-// }
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
