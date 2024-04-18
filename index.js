@@ -34,6 +34,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(express.static("public"));
 app.use(express.static(__dirname + "/public/"));
 
+
+
 let quiz = [];
 pool.query("SELECT * FROM capitals", (err, res) => {
   if (err) {
@@ -41,7 +43,7 @@ pool.query("SELECT * FROM capitals", (err, res) => {
   } else {
     quiz = res.rows;
   }
-  // pool.end();
+  pool.end();
 });
 
 let totalCorrect = 0;
@@ -52,18 +54,9 @@ let currentQuestion = {};
 app.get("/", async (req, res) => {
   totalCorrect = 0;
   await nextQuestion();
-  const currentUser = await getCurrentUser();
-  const countries = await checkVisisted();
-  res.render("index.ejs", {
-    question: currentQuestion,
-    countries: countries,
-    total: countries.length,
-    users: users,
-    color: currentUser.color,
-  });
+  console.log(currentQuestion);
+  res.render("index.ejs", { question: currentQuestion });
 });
-
-
 
 // POST a new post
 app.post("/submit", (req, res) => {
@@ -83,7 +76,6 @@ app.post("/submit", (req, res) => {
   });
 });
 
-
 async function nextQuestion() {
   const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
   currentQuestion = randomCountry;
@@ -92,3 +84,4 @@ async function nextQuestion() {
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+
