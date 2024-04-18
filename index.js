@@ -51,12 +51,24 @@ let totalCorrect = 0;
 let currentQuestion = {};
 
 // GET home page
+// app.get("/", async (req, res) => {
+//   totalCorrect = 0;
+//   await nextQuestion();
+//   console.log(currentQuestion);
+//   res.render("index.ejs", { question: currentQuestion });
+// });
 app.get("/", async (req, res) => {
-  totalCorrect = 0;
-  await nextQuestion();
-  console.log(currentQuestion);
-  res.render("index.ejs", { question: currentQuestion });
+  try {
+    totalCorrect = 0;
+    await nextQuestion();
+    console.log(currentQuestion);
+    res.render("index.ejs", { question: currentQuestion });
+  } catch (err) {
+    console.error("Error getting next question:", err);
+    res.status(500).send("Internal Server Error");
+  }
 });
+
 
 // POST a new post
 app.post("/submit", (req, res) => {
