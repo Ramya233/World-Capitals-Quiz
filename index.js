@@ -64,22 +64,40 @@ app.get("/", async (req, res) => {
 });
 
 // POST a new post
-app.post("/submit", (req, res) => {
+// app.post("/submit", (req, res) => {
+//   let answer = req.body.answer.trim();
+//   let isCorrect = false;
+//   if (currentQuestion.capital.toLowerCase() === answer.toLowerCase()) {
+//     totalCorrect++;
+//     console.log(totalCorrect);
+//     isCorrect = true;
+//   }
+
+//   nextQuestion();
+//   res.render("index.ejs", {
+//     question: currentQuestion,
+//     wasCorrect: isCorrect,
+//     totalScore: totalCorrect,
+//   });
+// });
+
+app.post("/submit", async (req, res) => {
   let answer = req.body.answer.trim();
   let isCorrect = false;
+  
   if (currentQuestion.capital.toLowerCase() === answer.toLowerCase()) {
     totalCorrect++;
-    console.log(totalCorrect);
     isCorrect = true;
   }
-
-  nextQuestion();
+  
+  await nextQuestion(); // Get the next question
   res.render("index.ejs", {
     question: currentQuestion,
     wasCorrect: isCorrect,
     totalScore: totalCorrect,
   });
 });
+
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
