@@ -50,10 +50,7 @@ let totalCorrect = 0;
 
 let currentQuestion = {};
 
-async function nextQuestion() {
-  const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
-  currentQuestion = randomCountry;
-}
+nextQuestion();
 
 // GET home page
 app.get("/", async (req, res) => {
@@ -64,40 +61,16 @@ app.get("/", async (req, res) => {
 });
 
 // POST a new post
-// app.post("/submit", (req, res) => {
-//   let answer = req.body.answer.trim();
-//   let isCorrect = false;
-//   if (currentQuestion.capital.toLowerCase() === answer.toLowerCase()) {
-//     totalCorrect++;
-//     console.log(totalCorrect);
-//     isCorrect = true;
-//   }
-
-//   nextQuestion();
-//   res.render("index.ejs", {
-//     question: currentQuestion,
-//     wasCorrect: isCorrect,
-//     totalScore: totalCorrect,
-//   });
-// });
-
-app.post("/submit", async (req, res) => {
+app.post("/submit", (req, res) => {
   let answer = req.body.answer.trim();
   let isCorrect = false;
-  
-  console.log("Before answer check:", currentQuestion); // Debugging line
-  
   if (currentQuestion.capital.toLowerCase() === answer.toLowerCase()) {
     totalCorrect++;
+    console.log(totalCorrect);
     isCorrect = true;
   }
-  
-  console.log("After answer check:", currentQuestion); // Debugging line
-  
-  await nextQuestion(); // Get the next question
-  
-  console.log("After nextQuestion:", currentQuestion); // Debugging line
-  
+
+  nextQuestion();
   res.render("index.ejs", {
     question: currentQuestion,
     wasCorrect: isCorrect,
@@ -105,7 +78,10 @@ app.post("/submit", async (req, res) => {
   });
 });
 
-
+async function nextQuestion() {
+  const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
+  currentQuestion = randomCountry;
+}
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
