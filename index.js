@@ -41,7 +41,7 @@ pool.query("SELECT * FROM capitals", (err, res) => {
   } else {
     quiz = res.rows;
   }
-  pool.end();
+  // pool.end();
 });
 
 let totalCorrect = 0;
