@@ -62,7 +62,12 @@ app.get("/", async (req, res) => {
   totalCorrect = 0;
   currentQuestion = await nextQuestion();
   console.log(currentQuestion);
-  res.render("index.ejs", { question: currentQuestion });
+  if (currentQuestion) {
+    res.render("index.ejs", { question: currentQuestion });
+  } else {
+    // If currentQuestion is undefined, render an error message or handle it as needed
+    res.status(500).send("Error: Unable to retrieve the question");
+  }
 });
 
 
