@@ -21,7 +21,7 @@
     </div>
 
     <h1 id="countryName">
-      <%=question.country %>
+      <%= question ? question.country : "" %>
     </h1>
     <div class="answer-container">
       <input type="text" name="answer" id="userInput" placeholder="Enter the capital" autofocus autocomplete="off">

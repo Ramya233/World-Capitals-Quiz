@@ -49,29 +49,33 @@ let totalCorrect = 0;
 let currentQuestion = {};
 
 // GET home page
-// app.get("/", async (req, res) => {
-//   totalCorrect = 0;
-//   await nextQuestion();
-//   console.log(currentQuestion);
-//   res.render("index.ejs", { question: currentQuestion });
-// });
-
-// GET home page
-// GET home page
 app.get("/", async (req, res) => {
   totalCorrect = 0;
-  currentQuestion = await nextQuestion();
+  await nextQuestion();
   console.log(currentQuestion);
-  if (currentQuestion) {
-    res.render("index.ejs", { question: currentQuestion });
-  } else {
-    // If currentQuestion is undefined, render an error message or handle it as needed
-    res.status(500).send("Error: Unable to retrieve the question");
-  }
+  res.render("index.ejs", { question: currentQuestion });
 });
 
 
 // POST a new post
+// app.post("/submit", (req, res) => {
+//   let answer = req.body.answer.trim();
+//   let isCorrect = false;
+//   if (currentQuestion.capital.toLowerCase() === answer.toLowerCase()) {
+//     totalCorrect++;
+//     console.log(totalCorrect);
+//     isCorrect = true;
+//   }
+
+//   nextQuestion();
+//   res.render("index.ejs", {
+//     question: currentQuestion,
+//     wasCorrect: isCorrect,
+//     totalScore: totalCorrect,
+//   });
+// });
+
+
 app.post("/submit", (req, res) => {
   let answer = req.body.answer.trim();
   let isCorrect = false;
@@ -89,16 +93,17 @@ app.post("/submit", (req, res) => {
   });
 });
 
-// async function nextQuestion() {
-//   const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
-//   currentQuestion = randomCountry;
-// }
 
 async function nextQuestion() {
   const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
   currentQuestion = randomCountry;
-  return currentQuestion;
 }
+
+// async function nextQuestion() {
+//   const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
+//   currentQuestion = randomCountry;
+//   return currentQuestion;
+// }
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
