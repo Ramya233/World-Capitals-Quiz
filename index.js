@@ -93,10 +93,24 @@ app.post("/submit", (req, res) => {
   });
 });
 
+// async function nextQuestion() {
+//   const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
+//   currentQuestion = randomCountry;
+// }
+
 async function nextQuestion() {
-  const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
-  currentQuestion = randomCountry;
+  try {
+    const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
+    if (!randomCountry) {
+      throw new Error("No questions available");
+    }
+    currentQuestion = randomCountry;
+  } catch (err) {
+    console.error("Error fetching next question:", err);
+    throw err; // re-throw the error to be caught in the route handler
+  }
 }
+
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
