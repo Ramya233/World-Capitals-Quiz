@@ -49,6 +49,14 @@ let totalCorrect = 0;
 let currentQuestion = {};
 
 // GET home page
+// app.get("/", async (req, res) => {
+//   totalCorrect = 0;
+//   await nextQuestion();
+//   console.log(currentQuestion);
+//   res.render("index.ejs", { question: currentQuestion });
+// });
+
+// GET home page
 app.get("/", async (req, res) => {
   totalCorrect = 0;
   await nextQuestion();
