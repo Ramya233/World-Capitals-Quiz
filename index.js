@@ -52,36 +52,44 @@ let currentQuestion = {};
 
 async function nextQuestion() {
   const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
-  currentQuestion = randomCountry;
+  currentQuestion = randomCountry || {};
 }
 
 nextQuestion();
 
 // GET home page
 app.get("/", async (req, res) => {
-  totalCorrect = 0;
-  await nextQuestion();
-  console.log(currentQuestion);
-  res.render("index.ejs", { question: currentQuestion });
+  try {
+    await nextQuestion();
+    res.render("index.ejs", { question: currentQuestion });
+  } catch (error) {
+    console.error("Error rendering index.ejs:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
+
 
 // POST a new post
 app.post("/submit", (req, res) => {
   let answer = req.body.answer.trim();
   let isCorrect = false;
-  if (currentQuestion.capital.toLowerCase() === answer.toLowerCase()) {
+  
+  if (currentQuestion && currentQuestion.capital && currentQuestion.capital.toLowerCase() === answer.toLowerCase()) {
     totalCorrect++;
     console.log(totalCorrect);
     isCorrect = true;
   }
 
   nextQuestion();
+  
   res.render("index.ejs", {
-    question: currentQuestion,
+    question: currentQuestion || {},
     wasCorrect: isCorrect,
     totalScore: totalCorrect,
   });
 });
+
+
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
