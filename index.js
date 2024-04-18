@@ -51,29 +51,12 @@ let totalCorrect = 0;
 let currentQuestion = {};
 
 // GET home page
-// app.get("/", async (req, res) => {
-//   totalCorrect = 0;
-//   await nextQuestion();
-//   console.log(currentQuestion);
-//   res.render("index.ejs", { question: currentQuestion });
-// });
-// GET home page
 app.get("/", async (req, res) => {
-  try {
-    totalCorrect = 0;
-    await nextQuestion();
-    if (!currentQuestion) {
-      throw new Error("Failed to fetch next question");
-    }
-    console.log(currentQuestion);
-    res.render("index.ejs", { question: currentQuestion });
-  } catch (err) {
-    console.error("Error getting next question:", err);
-    res.status(500).send(`Internal Server Error: ${err.message}`);
-  }
+  totalCorrect = 0;
+  await nextQuestion();
+  console.log(currentQuestion);
+  res.render("index.ejs", { question: currentQuestion });
 });
-
-
 
 // POST a new post
 app.post("/submit", (req, res) => {
@@ -93,24 +76,10 @@ app.post("/submit", (req, res) => {
   });
 });
 
-// async function nextQuestion() {
-//   const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
-//   currentQuestion = randomCountry;
-// }
-
 async function nextQuestion() {
-  try {
-    const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
-    if (!randomCountry) {
-      throw new Error("No questions available");
-    }
-    currentQuestion = randomCountry;
-  } catch (err) {
-    console.error("Error fetching next question:", err);
-    throw err; // re-throw the error to be caught in the route handler
-  }
+  const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
+  currentQuestion = randomCountry;
 }
-
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
