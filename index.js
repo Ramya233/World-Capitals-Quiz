@@ -57,12 +57,14 @@ let currentQuestion = {};
 // });
 
 // GET home page
+// GET home page
 app.get("/", async (req, res) => {
   totalCorrect = 0;
-  await nextQuestion();
+  currentQuestion = await nextQuestion();
   console.log(currentQuestion);
   res.render("index.ejs", { question: currentQuestion });
 });
+
 
 // POST a new post
 app.post("/submit", (req, res) => {
@@ -82,9 +84,15 @@ app.post("/submit", (req, res) => {
   });
 });
 
+// async function nextQuestion() {
+//   const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
+//   currentQuestion = randomCountry;
+// }
+
 async function nextQuestion() {
   const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
   currentQuestion = randomCountry;
+  return currentQuestion;
 }
 
 app.listen(port, () => {
